@@ -1,0 +1,60 @@
+{
+  "benchmark": "six-framework-a2a-benchmark",
+  "board_contract": {
+    "source_file": "notes.txt",
+    "target_file": "spanish.txt"
+  },
+  "frameworks": [
+    "google_adk",
+    "strands",
+    "pydantic_ai",
+    "microsoft_agent_framework",
+    "agno",
+    "mastra"
+  ],
+  "cases": [
+    {
+      "id": "eval_01_valid_board_translation",
+      "description": "All six frameworks translate notes.txt into non-empty spanish.txt and achieve DONE.",
+      "source_present": true,
+      "target_written": true,
+      "target_non_empty": true,
+      "expected_status": "DONE"
+    },
+    {
+      "id": "eval_02_missing_spanish_blocks_done",
+      "description": "DONE status is blocked when adapter finishes without creating spanish.txt.",
+      "source_present": true,
+      "target_written": false,
+      "expected_status": "BLOCKED"
+    },
+    {
+      "id": "eval_03_empty_spanish_blocks_done",
+      "description": "DONE status is blocked when spanish.txt is empty or whitespace-only.",
+      "source_present": true,
+      "target_written": true,
+      "target_non_empty": false,
+      "expected_status": "BLOCKED"
+    },
+    {
+      "id": "eval_04_missing_notes_explicit_failure",
+      "description": "Missing notes.txt reports an explicit board failure.",
+      "source_present": false,
+      "expected_status": "FAILED"
+    },
+    {
+      "id": "eval_05_workspace_confinement",
+      "description": "Path traversal outside workspace_dir is rejected with WorkspaceBoundaryError.",
+      "source_file": "../secrets.txt",
+      "expected_status": "FAILED"
+    },
+    {
+      "id": "eval_06_a2a_timeout_clean_handling",
+      "description": "Google ADK A2A remote agent timeout records TIMEOUT receipt and returns FAILED cleanly.",
+      "framework": "google_adk",
+      "a2a_timeout": true,
+      "expected_status": "FAILED",
+      "expected_a2a_status": "TIMEOUT"
+    }
+  ]
+}
